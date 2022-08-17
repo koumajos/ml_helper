@@ -131,7 +131,7 @@ class MLHealper:
         classifications = collections.OrderedDict(sorted(classifications.items()))
         for k, v in classifications.items():
             if k in real_class:
-                self.classifications_array.append(v)
+                self.classifications_array.append(str(v))
             classifications_all.append(v)
         print(self.classifications_array)
 

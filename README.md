@@ -1,4 +1,4 @@
-# LS Periodogram Method Package
+# ML helper Package
 
 ```
 network_time_series/
@@ -31,16 +31,12 @@ sudo pip3 install -e ml_helper
 Then you can use in python modules as:
 
 ```python
-from network_time_series.time_series import TimeSeries
-from network_time_series.detection import perform_space_detection
+import ml_helper
 
-id = "<ip>(<port>)-<ip>"
-packets = [...]
-bytes = [...]
-start_time = [...]
-end_time = [...]
-
-time_serie = TimeSeries(id, packets, bytes, start_time, end_time)
-
-spaces = perform_space_detection(time_serie)
+ml = ml_helper.MLHealper("database.csv")
+ml.set_label(labelname="LABEL")
+features = [...]
+ml.train_test_split(features)
+ml.RandomForestClassifier()
+print(ml.get_classification_report())
 ```
