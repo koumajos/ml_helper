@@ -79,6 +79,12 @@ class MLHealper:
         # classifiers
         self.randomforest = None
         self.randomforest_pred = None
+        self.knn = None
+        self.knn_pred = None
+        self.xgboost = None
+        self.xgboost_pred = None
+        self.gnb = None
+        self.gnb_pred = None
 
     def set_label(self, labelname: str = ""):
         if labelname == "":
@@ -142,6 +148,17 @@ class MLHealper:
             self.y_test, self.randomforest_pred, target_names=self.classifications_array
         )
 
+    # perform all models
+    def automatic_perform_models(self):
+        print("Performing RandomForestClassifier...")
+        self.RandomForestClassifier()
+        print("Performing KNeighborsClassifier...")
+        self.KNeighborsClassifier()
+        print("Performing XGBClassifier...")
+        self.XGBClassifier()
+        print("Performing GaussianNB...")
+        self.GaussianNB()
+
     # ML models
     def RandomForestClassifier(self, n_estimators=100):
         self.randomforest = RandomForestClassifier(n_estimators=n_estimators)
@@ -150,4 +167,40 @@ class MLHealper:
         print(
             "Accuracy of RandomForestClassifier: ",
             metrics.accuracy_score(self.y_test, self.randomforest_pred),
+        )
+
+    def KNeighborsClassifier(self, n_neighbors=3):
+        self.knn = KNeighborsClassifier(n_neighbors=n_neighbors)
+        self.knn.fit(self.X_train, self.y_train)
+        self.knn_pred = self.knn.predict(self.X_test)
+        print(
+            "Accuracy of KNeighborsClassifier: ",
+            metrics.accuracy_score(self.y_test, self.knn_pred),
+        )
+
+    def XGBClassifier(
+        self, n_estimators=100, enable_categorical=True, use_label_encoder=False
+    ):
+        self.xgboost = XGBClassifier(
+            n_estimators=n_estimators,
+            enable_categorical=enable_categorical,
+            use_label_encoder=use_label_encoder,
+        )
+        self.xgboost.fit(self.X_train, self.y_train)
+        self.xgboost_pred = self.xgboost.predict(self.X_test)
+        print(
+            "Accuracy of XGBClassifier: ",
+            metrics.accuracy_score(self.y_test, self.xgboost_pred),
+        )
+
+    def GaussianNB(self):
+        # Create a Gaussian Classifier
+        self.gnb = GaussianNB()
+        # Train the model using the training sets y_pred=clf.predict(X_test)
+        self.gnb.fit(self.X_train, self.y_train)
+        self.gnb_pred = self.gnb.predict(self.X_test)
+        # Model Accuracy, how often is the classifier correct?
+        print(
+            "Accuracy of GaussianNB: ",
+            metrics.accuracy_score(self.y_test, self.gnb_pred),
         )
